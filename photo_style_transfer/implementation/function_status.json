@@ -1,0 +1,99 @@
+{
+  "frontend": {
+    "components": {
+      "authentication": {
+        "login": { "status": "not_started", "priority": "high" },
+        "register": { "status": "not_started", "priority": "high" },
+        "resetPassword": { "status": "not_started", "priority": "medium" }
+      },
+      "dashboard": {
+        "projectList": { "status": "not_started", "priority": "high" },
+        "creditDisplay": { "status": "not_started", "priority": "high" }
+      },
+      "upload": {
+        "examplePhotoUpload": { "status": "not_started", "priority": "high" },
+        "targetPhotoUpload": { "status": "not_started", "priority": "high" },
+        "dragAndDrop": { "status": "not_started", "priority": "medium" }
+      },
+      "styleAnalysis": {
+        "styleDisplay": { "status": "not_started", "priority": "high" },
+        "feedbackForm": { "status": "not_started", "priority": "medium" }
+      },
+      "editPreview": {
+        "previewDisplay": { "status": "not_started", "priority": "high" },
+        "adjustmentControls": { "status": "not_started", "priority": "medium" }
+      },
+      "results": {
+        "resultGallery": { "status": "not_started", "priority": "high" },
+        "downloadOptions": { "status": "not_started", "priority": "high" },
+        "comparisonView": { "status": "not_started", "priority": "medium" }
+      },
+      "payment": {
+        "creditPurchase": { "status": "not_started", "priority": "high" },
+        "paymentForm": { "status": "not_started", "priority": "high" }
+      }
+    },
+    "routing": { "status": "not_started", "priority": "high" },
+    "stateManagement": { "status": "not_started", "priority": "high" },
+    "apiIntegration": { "status": "not_started", "priority": "high" }
+  },
+  "backend": {
+    "services": {
+      "authentication": {
+        "register": { "status": "not_started", "priority": "high" },
+        "login": { "status": "not_started", "priority": "high" },
+        "tokenValidation": { "status": "not_started", "priority": "high" },
+        "passwordReset": { "status": "not_started", "priority": "medium" }
+      },
+      "photoService": {
+        "upload": { "status": "not_started", "priority": "high" },
+        "storage": { "status": "not_started", "priority": "high" },
+        "retrieval": { "status": "not_started", "priority": "high" },
+        "metadata": { "status": "not_started", "priority": "medium" }
+      },
+      "analysisService": {
+        "llmIntegration": { "status": "not_started", "priority": "high" },
+        "styleAnalysis": { "status": "not_started", "priority": "high" },
+        "feedbackProcessing": { "status": "not_started", "priority": "medium" }
+      },
+      "editingService": {
+        "lightroomIntegration": { "status": "not_started", "priority": "high" },
+        "editDetermination": { "status": "not_started", "priority": "high" },
+        "editApplication": { "status": "not_started", "priority": "high" },
+        "resultStorage": { "status": "not_started", "priority": "high" }
+      },
+      "paymentService": {
+        "creditManagement": { "status": "not_started", "priority": "high" },
+        "paymentProcessing": { "status": "not_started", "priority": "high" },
+        "receiptGeneration": { "status": "not_started", "priority": "medium" }
+      }
+    },
+    "database": {
+      "schema": { "status": "not_started", "priority": "high" },
+      "migrations": { "status": "not_started", "priority": "high" },
+      "seedData": { "status": "not_started", "priority": "medium" }
+    },
+    "api": {
+      "authEndpoints": { "status": "not_started", "priority": "high" },
+      "userEndpoints": { "status": "not_started", "priority": "high" },
+      "projectEndpoints": { "status": "not_started", "priority": "high" },
+      "photoEndpoints": { "status": "not_started", "priority": "high" },
+      "styleEndpoints": { "status": "not_started", "priority": "high" },
+      "editingEndpoints": { "status": "not_started", "priority": "high" },
+      "paymentEndpoints": { "status": "not_started", "priority": "high" }
+    }
+  },
+  "infrastructure": {
+    "containerization": { "status": "not_started", "priority": "high" },
+    "cicd": { "status": "not_started", "priority": "high" },
+    "monitoring": { "status": "not_started", "priority": "medium" },
+    "logging": { "status": "not_started", "priority": "medium" },
+    "security": { "status": "not_started", "priority": "high" }
+  },
+  "externalIntegrations": {
+    "llmService": { "status": "not_started", "priority": "high" },
+    "lightroomApi": { "status": "not_started", "priority": "high" },
+    "paymentProcessor": { "status": "not_started", "priority": "high" },
+    "emailService": { "status": "not_started", "priority": "medium" }
+  }
+}
