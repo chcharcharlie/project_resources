@@ -42,6 +42,19 @@
     - Removed "_KERNEL" suffix from announcement_id, id fields in Announcement class
     - Ensured consistent ID handling throughout the application
     - Fixed potential ID mismatch issues in related tables (CoinData, Analysis, Notification)
+15. Enhanced HTTP client with anti-bot detection measures:
+    - Implemented proxy rotation capability
+    - Added user agent rotation
+    - Implemented cookie persistence
+    - Added request delays and jitter for more human-like behavior
+    - Enhanced request headers to mimic different browsers
+    - Created fallback mechanisms when captcha is detected
+16. Improved Binance crawler to better handle listing details:
+    - Added preliminary page visits to establish session
+    - Enhanced API request headers with proper referrer chains
+    - Implemented multiple fallback approaches when API fails
+    - Added CoinGecko integration for supplementary token data
+    - Created comprehensive testing script to validate enhancements
 
 ## Next Steps
 
@@ -62,6 +75,7 @@
 1. **Deployment Strategy**: Need to determine optimal deployment strategy for production
 2. **Long-term Monitoring**: Need to establish protocols for ongoing system monitoring
 3. **Data Quality Assurance**: Need to verify data quality and consistency after ID handling fixes
+4. **Bot Detection Avoidance**: Enhanced HTTP client with anti-bot measures for accessing Binance listing details reliably
 
 ## Resources Allocation
 
@@ -125,6 +139,7 @@
 | ID | Task | Status | Progress | Due Date |
 |----|------|--------|----------|----------|
 | T4.8 | Deploy production instance | In Progress | 50% | TBD |
+| T4.9 | Enhance anti-bot measures | Complete | 100% | 2025-04-02 |
 
 ## Implementation Notes
 
