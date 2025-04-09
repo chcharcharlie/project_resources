@@ -1,9 +1,9 @@
 {
     "project_name": "celebrity_trade_bot",
-    "status": "System Design",
+    "status": "Implementation",
     "github_username": "chcharcharlie",
     "last_updated": "2024-09-16",
-    "active_role": "Software Architect",
+    "active_role": "Software Engineer",
     "roles": ["Product Analyst", "Product Manager", "Software Architect", "Software Engineer"],
     "repositories": {
         "documentation": "chcharcharlie/project_resources/celebrity_trade_bot",
