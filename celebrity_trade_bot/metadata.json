@@ -1,0 +1,12 @@
+{
+    "project_name": "celebrity_trade_bot",
+    "status": "Initialization",
+    "github_username": "chcharcharlie",
+    "last_updated": "",
+    "active_role": "Project Manager",
+    "roles": ["Product Analyst", "Product Manager", "Software Architect", "Software Engineer"],
+    "repositories": {
+        "documentation": "chcharcharlie/project_resources/celebrity_trade_bot",
+        "code": "chcharcharlie/claude_celebrity_trade_bot"
+    }
+} 
