@@ -1,9 +1,9 @@
 {
     "project_name": "celebrity_trade_bot",
-    "status": "Requirements Gathering",
+    "status": "Product Requirements",
     "github_username": "chcharcharlie",
     "last_updated": "2024-09-16",
-    "active_role": "Product Analyst",
+    "active_role": "Product Manager",
     "roles": ["Product Analyst", "Product Manager", "Software Architect", "Software Engineer"],
     "repositories": {
         "documentation": "chcharcharlie/project_resources/celebrity_trade_bot",
