@@ -7,15 +7,17 @@ You are building a decentralized perpetual contracts exchange that enables trade
 ## Business Objectives
 
 1. **Create a High-Performance DEX**: Target $5B daily trading volume comparable to leading DEXs
-2. **Enable Stock Market Access**: Provide crypto users exposure to US equity markets through perpetual contracts
+2. **Democratize Stock Market Access**: Become the "perp DEX version of Robinhood" - making leveraged US equity exposure accessible to retail crypto traders
 3. **Maintain Decentralization**: All core functions executed on-chain via smart contracts
-4. **Support Professional Trading**: Offer advanced features and high leverage for sophisticated traders
+4. **Simplify Complex Trading**: While backend supports sophisticated features, enable simple user experiences through future UI development
 
 ## Target Users
 
-- **Primary**: Professional crypto traders seeking leveraged exposure to US equity markets
+- **Primary**: Retail crypto traders seeking accessible leveraged exposure to US equity markets
 - **Secondary**: DeFi protocols and market makers providing liquidity
 - **Tertiary**: Arbitrageurs maintaining price efficiency between markets
+
+Note: While this requirements document focuses on smart contract implementation without UI, a separate mobile UI will be developed to optimize the retail user experience and simplify perpetual DEX trading.
 
 ## Core Functionality
 
