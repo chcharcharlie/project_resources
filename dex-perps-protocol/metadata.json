@@ -1,20 +1,22 @@
 {
   "project_name": "dex-perps-protocol",
   "description": "Decentralized perpetual contracts exchange for US stock prices - 'The perp DEX version of Robinhood'",
-  "status": "creating_prd",
+  "status": "prd_complete",
   "created_date": "2025-01-22",
   "last_updated": "2025-01-22",
   "active_role": "product_manager",
-  "phases_completed": ["initialization", "requirements_gathering"],
-  "current_phase": "product_specification",
+  "phases_completed": ["initialization", "requirements_gathering", "product_specification"],
+  "current_phase": "awaiting_architecture",
   "roles_assigned": ["product_analyst", "product_manager", "software_architect", "software_engineer"],
   "key_decisions": {
     "target_users": "Retail traders (Robinhood-like positioning)",
-    "leverage": "100X maximum",
-    "collateral": "Stablecoins (USDC, USDT, DAI)",
+    "leverage": "100X maximum with dynamic tiers",
+    "collateral": "Stablecoins (USDC 100%, USDT 98%, DAI 95% weight)",
     "target_volume": "$5B daily",
     "chain": "TBD (considering L2s and Solana)",
-    "order_book": "Fully on-chain",
-    "funding_rate": "1 hour intervals with modified formula"
+    "order_book": "Fully on-chain with price-time priority",
+    "funding_rate": "1 hour intervals, 3x premium adjustment factor",
+    "liquidation": "Hybrid partial/full with 1.5% penalty",
+    "fees": "0.02% maker, 0.05% taker"
   }
 }
