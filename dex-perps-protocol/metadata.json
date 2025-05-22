@@ -1,12 +1,12 @@
 {
   "project_name": "dex-perps-protocol",
   "description": "Decentralized perpetual contracts exchange for US stock prices - 'The perp DEX version of Robinhood'",
-  "status": "prd_complete",
+  "status": "architecture_design",
   "created_date": "2025-01-22",
   "last_updated": "2025-01-22",
-  "active_role": "product_manager",
+  "active_role": "software_architect",
   "phases_completed": ["initialization", "requirements_gathering", "product_specification"],
-  "current_phase": "awaiting_architecture",
+  "current_phase": "technical_architecture",
   "roles_assigned": ["product_analyst", "product_manager", "software_architect", "software_engineer"],
   "key_decisions": {
     "target_users": "Retail traders (Robinhood-like positioning)",
