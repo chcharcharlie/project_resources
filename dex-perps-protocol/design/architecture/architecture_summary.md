@@ -4,168 +4,205 @@
 
 ## Architecture Overview
 
-The Software Architecture has been designed for a decentralized perpetual contracts exchange targeting retail traders ("the perp DEX version of Robinhood"). The architecture prioritizes AI implementation efficiency while maintaining professional-grade system design suitable for $5B daily trading volume.
+The technical architecture for the DEX Perpetual Contracts Protocol has been designed with a focus on:
+- **Modularity**: 6 independent modules with clear interfaces
+- **AI-Optimized**: Components sized for efficient AI implementation
+- **Scalability**: Supports $5B+ daily volume target
+- **Security**: Multi-layered security with circuit breakers and timelocks
+
+## Technology Stack Selected
+
+| Layer | Technology | Justification |
+|-------|------------|---------------|
+| **Blockchain** | Polygon (Primary) | Low fees ($0.01-0.05), 2s blocks, mature DeFi ecosystem |
+| **Smart Contracts** | Solidity 0.8.19+ | Latest security features, gas optimizations |
+| **Development** | Hardhat | Best testing and debugging capabilities |
+| **Oracles** | Chainlink + Pyth | Multi-oracle redundancy for reliability |
+| **Architecture** | Modular Upgradeable | Proxy pattern for future improvements |
+
+## Module Architecture
+
+### 1. Trading Engine Module (~3,000 lines)
+- **Purpose**: Order management and matching
+- **Key Components**: OrderBook, MatchingEngine, OrderValidator
+- **Complexity**: High (order book algorithms)
+- **Dependencies**: Market Registry
+
+### 2. Core Protocol Engine (~4,000 lines)
+- **Purpose**: Position and margin management
+- **Key Components**: PositionManager, MarginManager, FundingRateEngine
+- **Complexity**: Very High (financial calculations)
+- **Dependencies**: Trading Engine, Oracle, Market Registry
+
+### 3. Risk Management Module (~2,500 lines)
+- **Purpose**: Liquidations and risk controls
+- **Key Components**: LiquidationEngine, CircuitBreaker, PositionLimits
+- **Complexity**: High (risk algorithms)
+- **Dependencies**: Core Protocol, Oracle
+
+### 4. Oracle Integration Module (~1,500 lines)
+- **Purpose**: Multi-oracle price aggregation
+- **Key Components**: OracleAggregator, ChainlinkAdapter, PythAdapter
+- **Complexity**: Medium (statistical algorithms)
+- **Dependencies**: Market Registry
+
+### 5. Insurance Fund Module (~1,000 lines)
+- **Purpose**: Bad debt coverage and ADL
+- **Key Components**: InsuranceFund, AutoDeleveraging, FundAllocator
+- **Complexity**: Medium (fund management)
+- **Dependencies**: Risk Management
+
+### 6. Market Registry Module (~1,000 lines)
+- **Purpose**: Configuration and access control
+- **Key Components**: MarketRegistry, AccessController, EmergencyAdmin
+- **Complexity**: Low (configuration management)
+- **Dependencies**: None (base layer)
 
 ## Key Architecture Decisions
 
-### 1. Technology Stack
-- **Primary Chain**: Polygon (low fees, fast blocks, mature DeFi ecosystem)
-- **Alternative**: Arbitrum (stronger security, growing ecosystem)
-- **Smart Contracts**: Solidity 0.8.19+ with OpenZeppelin base contracts
-- **Architecture Pattern**: Modular upgradeable contracts with clear separation
+### 1. Order Book Design
+- **Decision**: On-chain order book with lazy deletion
+- **Rationale**: Full decentralization, gas optimization
+- **Trade-offs**: Higher gas costs vs off-chain alternatives
 
-### 2. System Components
+### 2. Position Management
+- **Decision**: Single position per market per trader
+- **Rationale**: Simplifies margin calculations
+- **Trade-offs**: Less flexible than sub-accounts
 
-The system is organized into six AI-optimized modules:
+### 3. Funding Rate Implementation
+- **Decision**: Hourly settlement with 3x premium adjustment
+- **Rationale**: Faster convergence to spot prices
+- **Trade-offs**: More frequent settlements
 
-| Module | Purpose | Estimated Implementation Time |
-|--------|---------|------------------------------|
-| Trading Engine | Order book management and matching | 35-50 hours |
-| Core Protocol Engine | Position, margin, and funding management | 55-75 hours |
-| Risk Management | Liquidations and circuit breakers | 35-50 hours |
-| Oracle Integration | Multi-source price aggregation | 28-40 hours |
-| Insurance Fund | Bad debt coverage and ADL | 21-28 hours |
-| Market Registry | Configuration and access control | 21-28 hours |
+### 4. Liquidation Strategy
+- **Decision**: Hybrid partial/full based on size
+- **Rationale**: Reduces market impact for large positions
+- **Trade-offs**: More complex implementation
 
-**Total Estimated Implementation**: 195-271 hours
+### 5. Oracle Architecture
+- **Decision**: Multi-oracle with outlier rejection
+- **Rationale**: Manipulation resistance
+- **Trade-offs**: Higher costs, complexity
 
-### 3. Technical Specifications
+## Security Architecture
 
-#### Order Book Design
-- **Type**: Fully on-chain order book (not AMM)
-- **Algorithm**: Price-time priority (FIFO)
-- **Optimization**: Red-black trees for price levels, lazy deletion
+### Access Control Layers
+1. **Admin Role**: Market creation, major parameters
+2. **Operator Role**: Daily operations, minor parameters
+3. **Emergency Admin**: Circuit breakers, freezing
+4. **Liquidator Role**: Priority liquidation access
+5. **Public Access**: Trading, viewing
 
-#### Position Management
-- **Margin Mode**: Isolated margin (initially)
-- **Leverage**: Up to 100X with dynamic tiers
-- **Collateral**: Multi-stablecoin (USDC, USDT, DAI)
+### Security Features
+- Timelock for critical parameter changes (48 hours)
+- Circuit breakers for extreme price movements
+- Multi-oracle validation to prevent manipulation
+- Reentrancy guards on all state-changing functions
+- Comprehensive input validation
 
-#### Risk Systems
-- **Liquidation**: Hybrid partial/full based on position size
-- **Circuit Breakers**: 5%/10%/20% price deviation limits
-- **Insurance Fund**: 40% of fees, covers bad debt
+## Performance Optimizations
 
-#### Oracle System
-- **Primary**: Chainlink price feeds
-- **Secondary**: Pyth Network (optional)
-- **Aggregation**: Median-based outlier rejection, weighted average
+### Gas Optimization Strategies
+1. **Packed Structs**: 3-slot position storage
+2. **Lazy Deletion**: Mark cancelled orders vs delete
+3. **Batch Operations**: Multiple orders per transaction
+4. **Storage Caching**: Minimize SLOAD operations
 
-### 4. Performance Targets
+### Scalability Features
+- Order book depth limits (top N levels)
+- Efficient data structures (Red-Black trees)
+- Event-based historical data
+- Modular architecture for parallel development
 
-- Order processing: 1000+ orders/second
-- Gas per trade: <200,000
-- Price deviation: <0.1% from spot
-- System uptime: 99.9%
+## Implementation Roadmap
 
-### 5. Security Architecture
+### Phase Breakdown
+1. **Foundation** (Weeks 1-2): Market Registry, Basic Oracle
+2. **Trading Core** (Weeks 3-4): Order Book, Matching Engine
+3. **Financial Engine** (Weeks 5-6): Positions, Margins, Funding
+4. **Risk Systems** (Weeks 7-8): Liquidations, Insurance
+5. **Integration** (Weeks 9-10): Testing, Optimization
+6. **Security** (Weeks 11-12): Audits, Deployment
 
-- **Access Control**: Role-based permissions (Admin, Operator, Liquidator)
-- **Upgradability**: Transparent proxy pattern with timelock
-- **Emergency Controls**: Market freeze, emergency settlement
-- **Validation**: Comprehensive parameter bounds and input validation
+### Estimated Total Effort
+- **Core Development**: 150-200 hours
+- **Testing**: 75-100 hours
+- **Optimization**: 40-60 hours
+- **Total**: 265-360 hours
 
-## Implementation Strategy
+## Risk Analysis
 
-### Phase Breakdown (12 weeks total)
+### Technical Risks Identified
+1. **Gas Limit Constraints**: Mitigated by batch operations
+2. **Oracle Manipulation**: Mitigated by multi-oracle design
+3. **Liquidation Cascades**: Mitigated by partial liquidations
+4. **Front-running**: Mitigated by commit-reveal where applicable
 
-1. **Foundation** (Weeks 1-2): Registry and Oracle setup
-2. **Trading Core** (Weeks 3-4): Order book and matching
-3. **Position Management** (Weeks 5-6): Core protocol implementation
-4. **Risk Systems** (Weeks 7-8): Liquidations and insurance
-5. **Integration** (Weeks 9-10): System integration and optimization
-6. **Launch Prep** (Weeks 11-12): Testing and deployment
+### Mitigation Strategies
+- Comprehensive testing (unit, integration, stress)
+- Gradual rollout with conservative parameters
+- Circuit breakers for emergency situations
+- Insurance fund for systemic risk
 
-### AI Implementation Guidelines
+## Deployment Strategy
 
-Each module is designed to be:
-- **Self-contained**: Complete functionality within context limits
-- **Well-defined**: Clear interfaces and dependencies
-- **Testable**: Comprehensive test requirements included
-- **Optimized**: Gas-efficient patterns documented
+### Testnet First
+1. Deploy to Polygon Mumbai
+2. 4-week public testing period
+3. Bug bounty program
+4. Performance benchmarking
 
-## Deliverables Created
+### Mainnet Rollout
+1. Limited market launch (5-10 assets)
+2. Conservative risk parameters
+3. Gradual parameter relaxation
+4. Progressive decentralization
 
-### 1. System Architecture Document
-- Complete technical architecture
-- Technology stack selection
-- High-level system design
-- Component relationships
+## Architecture Deliverables
 
-### 2. Component Specifications (6 modules)
-Each specification includes:
-- Detailed data structures
-- Core function implementations
-- Security measures
-- Testing requirements
-- Implementation checklists
+### Documentation Created
+1. **System Architecture**: Complete technical blueprint
+2. **Module Specifications**: Detailed specs for all 6 modules
+3. **Implementation Plan**: 12-week development roadmap
+4. **Component Diagrams**: Visual architecture representations
 
-### 3. Implementation Plan
-- 12-week phased approach
-- Development guidelines
-- Dependency management
-- Success criteria
+### Key Interfaces Defined
+- ITradingEngine
+- ICoreProtocol
+- IRiskManagement
+- IOracleAggregator
+- IInsuranceFund
+- IMarketRegistry
 
-### 4. Deployment Configuration
-- Network configurations
-- Deployment scripts
-- Parameter management
-- Emergency procedures
+## Recommendations for Implementation
 
-## Design Highlights
+### Development Priorities
+1. Start with Market Registry (all modules depend on it)
+2. Build Oracle Integration early (needed for testing)
+3. Implement Trading Engine before Core Protocol
+4. Leave optimization for dedicated phase
 
-### 1. Retail-Focused Architecture
-While the smart contracts support sophisticated features, the design acknowledges:
-- Target users are retail traders
-- Separate mobile UI will simplify the experience
-- System must handle high retail volume efficiently
+### Testing Strategy
+- 100% unit test coverage for business logic
+- Integration tests for module interactions
+- Stress tests for high-volume scenarios
+- Security-focused testing throughout
 
-### 2. Gas Optimization
-- Packed structs minimize storage slots
-- Batch operations for high-volume scenarios
-- Lazy deletion patterns
-- Efficient data structures (red-black trees)
+### Team Structure (if applicable)
+- Module ownership for parallel development
+- Shared libraries for common functionality
+- Regular integration checkpoints
+- Code review requirements
 
-### 3. Risk Management
-- Progressive liquidation system
-- Multiple oracle sources
-- Circuit breakers for extreme conditions
-- Insurance fund with ADL fallback
+## Transition to Implementation
 
-### 4. Scalability
-- Modular design allows component upgrades
-- Efficient order book can handle 1000+ orders/second
-- Position tracking optimized for large user base
+The architecture phase is now complete. All technical decisions have been made and documented. The system is ready for implementation by the Software Engineer role.
 
-## Critical Parameters Specified
+### Next Steps
+1. Set up development environment
+2. Initialize project structure
+3. Begin Market Registry implementation
+4. Follow the 12-week implementation plan
 
-| Parameter | Value | Justification |
-|-----------|-------|---------------|
-| Max Leverage | 100X | Competitive with centralized exchanges |
-| Initial Margin | 1% | Standard for 100X leverage |
-| Maintenance Margin | 0.6% | Balances risk and capital efficiency |
-| Liquidation Penalty | 1.5% | Market standard, funds insurance |
-| Maker Fee | 0.02% | Can be negative (rebate) |
-| Taker Fee | 0.05% | Competitive pricing |
-| Funding Interval | 1 hour | Frequent enough to track spot |
-| Funding Multiplier | 3X | Faster convergence to spot price |
-
-## Next Steps
-
-With the architecture phase complete, the project is ready for:
-
-1. **Implementation Phase**: Begin coding starting with Market Registry
-2. **Testing Framework**: Set up comprehensive test environment
-3. **Security Review**: Early security considerations during implementation
-4. **Performance Benchmarking**: Establish baseline metrics
-
-## Architecture Quality Metrics
-
-- ✅ All components specified with clear boundaries
-- ✅ Estimated implementation time within AI capabilities
-- ✅ Gas optimization strategies documented
-- ✅ Security measures defined at each layer
-- ✅ Deployment strategy includes safety mechanisms
-- ✅ Emergency procedures specified
-
-The architecture provides a solid foundation for building a high-performance DEX perpetual contracts protocol that can serve retail traders at scale while maintaining decentralization and security.
+The architecture provides a solid foundation for building a high-performance, secure, and scalable perpetual contracts DEX targeting retail traders.

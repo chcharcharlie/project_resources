@@ -1,477 +1,366 @@
 # Implementation Plan - DEX Perpetual Contracts Protocol
 
 ## Overview
+This document provides the detailed implementation roadmap for building the DEX Perpetual Contracts Protocol. The plan is optimized for AI-driven development with clear phases, dependencies, and deliverables.
 
-This document outlines the implementation strategy for the DEX Perpetual Contracts Protocol, optimized for AI-driven development. The plan follows a phased approach with clear dependencies and testing milestones.
+## Implementation Strategy
 
-## Implementation Timeline
-
-### Phase 1: Foundation (Weeks 1-2)
+### Phase 1: Foundation (Week 1-2)
 **Goal**: Establish core infrastructure and base contracts
 
-#### Week 1: Base Layer Setup
-1. **Market Registry Module** (21-28 hours)
-   - Core registry contract
-   - Access control system
-   - Parameter validation
-   - Basic market creation
+#### 1.1 Development Environment Setup
+- Initialize Hardhat project with TypeScript
+- Configure Solidity 0.8.19 compiler settings
+- Set up testing frameworks (Hardhat + Foundry)
+- Configure linting and formatting tools
 
-2. **Initial Testing Framework**
-   - Set up Hardhat environment
-   - Create test utilities
-   - Mock contracts for dependencies
+#### 1.2 Market Registry Module
+- **Priority**: Critical (all other modules depend on this)
+- **Components**:
+  - MarketLib.sol - Core data structures
+  - AccessController.sol - Role management  
+  - MarketRegistry.sol - Market configuration
+  - ValidationLib.sol - Parameter validation
+- **Testing**: Comprehensive unit tests
+- **Estimated Time**: 15 hours
 
-#### Week 2: Oracle Foundation
-1. **Oracle Integration Module** (28-40 hours)
-   - Oracle aggregator base
-   - Chainlink adapter
-   - Price validation logic
-   - Fallback mechanisms
+#### 1.3 Oracle Integration Module (Basic)
+- **Priority**: High (needed for price feeds)
+- **Components**:
+  - IOracleAggregator.sol - Interface definition
+  - MockOracle.sol - For testing
+  - ChainlinkAdapter.sol - Primary oracle
+- **Testing**: Integration with mock prices
+- **Estimated Time**: 10 hours
 
-2. **Integration Testing**
-   - Registry-Oracle integration
-   - Multi-oracle scenarios
-
-### Phase 2: Trading Core (Weeks 3-4)
+### Phase 2: Trading Core (Week 3-4)
 **Goal**: Implement order management and matching
 
-#### Week 3: Order Book System
-1. **Trading Engine Module - Part 1** (20-25 hours)
-   - Order data structures
-   - Order book management
-   - Order validation
+#### 2.1 Trading Engine Module
+- **Priority**: Critical
+- **Components**:
+  - OrderLib.sol - Order structures
+  - OrderBook.sol - Book management
+  - OrderValidator.sol - Validation logic
+  - MatchingEngine.sol - Order matching
+- **Dependencies**: Market Registry
+- **Testing**: Order lifecycle tests
+- **Estimated Time**: 25 hours
 
-2. **Unit Testing**
-   - Order placement tests
-   - Order book operations
+#### 2.2 Basic Position Management
+- **Priority**: High
+- **Components**:
+  - PositionLib.sol - Position structures
+  - PositionManager.sol - Basic position tracking
+- **Dependencies**: Trading Engine
+- **Testing**: Position creation/updates
+- **Estimated Time**: 15 hours
 
-#### Week 4: Matching Engine
-1. **Trading Engine Module - Part 2** (15-25 hours)
-   - Matching algorithm
-   - Trade execution
-   - Event system
+### Phase 3: Financial Engine (Week 5-6)
+**Goal**: Complete position management and margin system
 
-2. **Integration Testing**
-   - End-to-end order flow
-   - Gas optimization
+#### 3.1 Core Protocol Engine
+- **Priority**: Critical
+- **Components**:
+  - MarginManager.sol - Margin calculations
+  - FundingRateEngine.sol - Funding mechanism
+  - PnLCalculator.sol - P&L tracking
+  - CollateralManager.sol - Multi-collateral
+- **Dependencies**: Position Management
+- **Testing**: Complex financial calculations
+- **Estimated Time**: 35 hours
 
-### Phase 3: Position Management (Weeks 5-6)
-**Goal**: Core protocol implementation
+#### 3.2 Advanced Oracle Integration
+- **Priority**: High
+- **Components**:
+  - OracleAggregator.sol - Multi-oracle support
+  - PythAdapter.sol - Secondary oracle
+  - OracleValidator.sol - Price validation
+  - StatisticsLib.sol - Outlier detection
+- **Testing**: Price aggregation scenarios
+- **Estimated Time**: 15 hours
 
-#### Week 5: Position System
-1. **Core Protocol Engine - Part 1** (30-35 hours)
-   - Position manager
-   - Margin calculations
-   - P&L tracking
-
-2. **Testing**
-   - Position lifecycle tests
-   - Margin requirement tests
-
-#### Week 6: Funding System
-1. **Core Protocol Engine - Part 2** (25-40 hours)
-   - Funding rate engine
-   - Collateral management
-   - Settlement logic
-
-2. **Integration Testing**
-   - Trading to position flow
-   - Funding rate impacts
-
-### Phase 4: Risk Systems (Weeks 7-8)
+### Phase 4: Risk Systems (Week 7-8)
 **Goal**: Implement safety mechanisms
 
-#### Week 7: Liquidation System
-1. **Risk Management Module - Part 1** (20-25 hours)
-   - Liquidation engine
-   - Risk calculations
-   - Liquidator mechanisms
+#### 4.1 Risk Management Module
+- **Priority**: Critical
+- **Components**:
+  - LiquidationEngine.sol - Liquidation logic
+  - RiskCalculator.sol - Risk metrics
+  - CircuitBreaker.sol - Emergency halts
+  - PositionLimits.sol - Risk limits
+- **Dependencies**: Core Protocol, Oracle
+- **Testing**: Liquidation scenarios
+- **Estimated Time**: 25 hours
 
-2. **Insurance Fund Module** (21-28 hours)
-   - Fund management
-   - Bad debt coverage
+#### 4.2 Insurance Fund Module
+- **Priority**: High
+- **Components**:
+  - InsuranceFund.sol - Fund management
+  - AutoDeleveraging.sol - ADL mechanism
+  - FundAllocator.sol - Revenue distribution
+- **Dependencies**: Risk Management
+- **Testing**: Fund coverage scenarios
+- **Estimated Time**: 15 hours
 
-#### Week 8: Circuit Breakers
-1. **Risk Management Module - Part 2** (15-25 hours)
-   - Circuit breaker logic
-   - Position limits
-   - Emergency controls
+### Phase 5: Integration & Optimization (Week 9-10)
+**Goal**: System integration and performance optimization
 
-2. **System Testing**
-   - Liquidation scenarios
-   - Circuit breaker triggers
+#### 5.1 System Integration
+- **Tasks**:
+  - Module interconnection testing
+  - End-to-end workflow validation
+  - Event emission verification
+  - Cross-module state consistency
+- **Estimated Time**: 20 hours
 
-### Phase 5: Integration & Optimization (Weeks 9-10)
-**Goal**: Complete system integration
+#### 5.2 Gas Optimization
+- **Tasks**:
+  - Storage packing optimization
+  - Function call reduction
+  - Batch operation implementation
+  - Assembly optimizations for hot paths
+- **Estimated Time**: 15 hours
 
-#### Week 9: System Integration
-1. **Cross-Module Integration**
-   - Connect all modules
-   - End-to-end workflows
-   - Performance testing
+### Phase 6: Security & Deployment (Week 11-12)
+**Goal**: Security hardening and mainnet preparation
 
-2. **ADL Implementation**
-   - Auto-deleveraging logic
-   - Integration with insurance fund
+#### 6.1 Security Implementation
+- **Tasks**:
+  - Reentrancy guards
+  - Access control verification
+  - Parameter bound checking
+  - Emergency pause mechanisms
+- **Estimated Time**: 15 hours
 
-#### Week 10: Optimization
-1. **Gas Optimization**
-   - Storage optimization
-   - Computation efficiency
-   - Batch operations
+#### 6.2 Deployment Preparation
+- **Tasks**:
+  - Deployment scripts
+  - Migration contracts
+  - Configuration management
+  - Monitoring setup
+- **Estimated Time**: 10 hours
 
-2. **Security Hardening**
-   - Reentrancy protection
-   - Access control review
-   - Parameter bounds
-
-### Phase 6: Launch Preparation (Weeks 11-12)
-**Goal**: Prepare for deployment
-
-#### Week 11: Final Testing
-1. **Comprehensive Testing**
-   - Stress testing
-   - Security testing
-   - Mainnet fork testing
-
-2. **Documentation**
-   - Deployment guides
-   - API documentation
-   - Security procedures
-
-#### Week 12: Deployment
-1. **Testnet Deployment**
-   - Deploy all contracts
-   - Configure parameters
-   - Initialize markets
-
-2. **Monitoring Setup**
-   - Event monitoring
-   - Performance tracking
-   - Alert systems
-
-## Development Guidelines for AI Implementation
-
-### Component Development Order
-
-For each module, follow this sequence:
-
-1. **Data Structures** (2-3 hours)
-   ```solidity
-   // 1. Define all structs
-   // 2. Define enums and constants
-   // 3. Define storage variables
-   ```
-
-2. **Core Logic** (8-12 hours)
-   ```solidity
-   // 1. Implement main functions
-   // 2. Add internal helpers
-   // 3. Implement view functions
-   ```
-
-3. **Validation & Security** (3-5 hours)
-   ```solidity
-   // 1. Add input validation
-   // 2. Implement access control
-   // 3. Add reentrancy guards
-   ```
-
-4. **Events & Testing** (5-8 hours)
-   ```solidity
-   // 1. Define and emit events
-   // 2. Write unit tests
-   // 3. Write integration tests
-   ```
-
-### Code Organization Standards
-
-```solidity
-// SPDX-License-Identifier: MIT
-pragma solidity 0.8.19;
-
-// 1. Imports (external first, then internal)
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-import "./interfaces/IMarketRegistry.sol";
-
-// 2. Contract declaration with inheritance
-contract TradingEngine is ReentrancyGuard, AccessControl {
-    
-    // 3. Using declarations
-    using SafeMath for uint256;
-    
-    // 4. State variables (grouped by type)
-    // Constants
-    uint256 private constant PRECISION = 1e18;
-    
-    // Immutables
-    address private immutable marketRegistry;
-    
-    // Storage
-    mapping(uint256 => Order) private orders;
-    
-    // 5. Events
-    event OrderPlaced(uint256 indexed orderId, address indexed trader);
-    
-    // 6. Modifiers
-    modifier onlyActiveMarket(address market) {
-        require(IMarketRegistry(marketRegistry).isMarketActive(market), "Market not active");
-        _;
-    }
-    
-    // 7. Constructor
-    constructor(address _marketRegistry) {
-        marketRegistry = _marketRegistry;
-    }
-    
-    // 8. External functions
-    // 9. Public functions
-    // 10. Internal functions
-    // 11. Private functions
-    // 12. View functions
-}
-```
-
-### Testing Strategy
-
-#### Test Coverage Requirements
-- Unit Tests: 100% function coverage
-- Integration Tests: All critical paths
-- Edge Cases: 90% coverage
-- Gas Tests: All major operations
-
-#### Test Structure
-```javascript
-describe("TradingEngine", () => {
-    let tradingEngine;
-    let marketRegistry;
-    
-    beforeEach(async () => {
-        // Deploy contracts
-        // Set up test state
-    });
-    
-    describe("placeOrder", () => {
-        it("should place a valid limit order", async () => {
-            // Test implementation
-        });
-        
-        it("should revert on invalid market", async () => {
-            // Test implementation
-        });
-    });
-});
-```
-
-## Dependency Management
-
-### Module Dependencies
+## Component Dependencies
 
 ```
 MarketRegistry (no dependencies)
     ↓
-OracleIntegration (depends on MarketRegistry)
+OracleIntegration ← MarketRegistry
     ↓
-TradingEngine (depends on MarketRegistry, OracleIntegration)
+TradingEngine ← MarketRegistry
     ↓
-CoreProtocol (depends on all above)
+CoreProtocol ← TradingEngine, OracleIntegration, MarketRegistry
     ↓
-RiskManagement (depends on all above)
+RiskManagement ← CoreProtocol, OracleIntegration, MarketRegistry
     ↓
-InsuranceFund (depends on all above)
+InsuranceFund ← RiskManagement, CoreProtocol
 ```
 
-### External Dependencies
+## Testing Strategy
 
-1. **OpenZeppelin Contracts 4.9+**
-   - ReentrancyGuard
-   - AccessControl
-   - SafeERC20
-   - Pausable
+### Unit Testing Coverage Targets
+- Core business logic: 100%
+- State transitions: 100%
+- Edge cases: 95%
+- Integration points: 90%
 
-2. **Price Oracles**
-   - Chainlink Price Feeds
-   - Pyth Network (optional)
+### Test Categories by Module
 
-3. **Math Libraries**
-   - PRBMath for fixed-point math
-   - ABDKMath64x64 for advanced calculations
-
-## Configuration Management
-
-### Environment Variables
-
-```bash
-# Network Configuration
-NETWORK_RPC_URL=https://polygon-rpc.com
-CHAIN_ID=137
-BLOCK_CONFIRMATIONS=3
-
-# Contract Addresses (after deployment)
-MARKET_REGISTRY_ADDRESS=0x...
-ORACLE_AGGREGATOR_ADDRESS=0x...
-TRADING_ENGINE_ADDRESS=0x...
-CORE_PROTOCOL_ADDRESS=0x...
-RISK_MANAGEMENT_ADDRESS=0x...
-INSURANCE_FUND_ADDRESS=0x...
-
-# Oracle Configuration
-CHAINLINK_ETH_USD=0x...
-CHAINLINK_BTC_USD=0x...
-PYTH_ENDPOINT=0x...
-
-# Deployment Configuration
-DEPLOYER_PRIVATE_KEY=
-ETHERSCAN_API_KEY=
+#### Trading Engine Tests
+```solidity
+- Order placement validation
+- Order matching scenarios
+- Order book management
+- Self-trade prevention
+- Gas consumption tests
 ```
 
-### Initial Parameters
-
-```javascript
-// Market Configuration
-const marketConfig = {
-    symbol: "BTC-PERP",
-    tickSize: ethers.utils.parseUnits("0.01", 18), // $0.01
-    lotSize: ethers.utils.parseUnits("0.001", 18), // 0.001 BTC
-    maxLeverage: 100,
-    initialMarginRate: 100, // 1%
-    maintenanceMarginRate: 60, // 0.6%
-    makerFee: -5, // -0.05% (rebate)
-    takerFee: 10, // 0.1%
-    maxPositionSize: ethers.utils.parseUnits("1000", 18),
-    maxOrderSize: ethers.utils.parseUnits("100", 18)
-};
+#### Core Protocol Tests
+```solidity
+- Position lifecycle (open/increase/decrease/close)
+- Margin calculations
+- Funding rate calculations and settlement
+- P&L calculations (realized/unrealized)
+- Multi-collateral scenarios
 ```
 
-## Deployment Strategy
+#### Risk Management Tests
+```solidity
+- Liquidation threshold calculations
+- Partial vs full liquidation logic
+- Circuit breaker triggers
+- Position limit enforcement
+- ADL candidate selection
+```
 
-### 1. Testnet Deployment (Polygon Mumbai)
+### Integration Test Scenarios
+1. **Complete Trading Flow**
+   - Market creation → Order placement → Matching → Position update → P&L
 
-```javascript
-async function deployTestnet() {
-    // 1. Deploy Market Registry
-    const MarketRegistry = await ethers.getContractFactory("MarketRegistry");
-    const marketRegistry = await MarketRegistry.deploy();
+2. **Liquidation Flow**
+   - Position degradation → Liquidation trigger → Order placement → Insurance fund
+
+3. **Funding Flow**
+   - Rate calculation → Position settlement → Balance updates
+
+4. **Emergency Flow**
+   - Circuit breaker → Order cancellation → Position close only
+
+## Development Best Practices
+
+### Code Organization
+```solidity
+// File structure for each contract
+pragma solidity 0.8.19;
+
+// Imports (interfaces first, then libraries, then contracts)
+import "./interfaces/IModule.sol";
+import "./libraries/ModuleLib.sol";
+import "../shared/BaseContract.sol";
+
+// Contract documentation
+/**
+ * @title ModuleName
+ * @notice Brief description
+ * @dev Implementation details
+ */
+contract ModuleName is IModule, BaseContract {
+    // Type declarations
+    using ModuleLib for DataType;
     
-    // 2. Deploy Oracle Aggregator
-    const OracleAggregator = await ethers.getContractFactory("OracleAggregator");
-    const oracleAggregator = await OracleAggregator.deploy(marketRegistry.address);
+    // State variables (grouped by function)
+    // Constants
+    // Immutables  
+    // Storage
     
-    // 3. Deploy Trading Engine
-    const TradingEngine = await ethers.getContractFactory("TradingEngine");
-    const tradingEngine = await TradingEngine.deploy(
-        marketRegistry.address,
-        oracleAggregator.address
-    );
-    
-    // 4. Deploy Core Protocol
-    // ... continue for all modules
-    
-    // 5. Configure access control
-    await marketRegistry.grantRole(OPERATOR_ROLE, operatorAddress);
-    
-    // 6. Create test markets
-    await marketRegistry.createMarket("BTC-PERP", "Bitcoin Perpetual", marketConfig);
+    // Events
+    // Modifiers
+    // Constructor
+    // External functions
+    // Public functions
+    // Internal functions
+    // Private functions
 }
 ```
 
-### 2. Mainnet Deployment (Polygon)
+### Gas Optimization Checklist
+- [ ] Pack struct fields to minimize storage slots
+- [ ] Use `unchecked` blocks where overflow impossible
+- [ ] Cache storage reads in memory
+- [ ] Use `calldata` for read-only arrays
+- [ ] Implement batch operations
+- [ ] Short-circuit conditions
+- [ ] Use assembly for critical paths
 
-```javascript
-async function deployMainnet() {
-    // 1. Deploy proxy contracts
-    const MarketRegistryV1 = await ethers.getContractFactory("MarketRegistryV1");
-    const marketRegistryImpl = await MarketRegistryV1.deploy();
-    
-    const TransparentUpgradeableProxy = await ethers.getContractFactory(
-        "TransparentUpgradeableProxy"
-    );
-    const marketRegistryProxy = await TransparentUpgradeableProxy.deploy(
-        marketRegistryImpl.address,
-        proxyAdmin.address,
-        marketRegistryImpl.interface.encodeFunctionData("initialize", [])
-    );
-    
-    // 2. Verify contracts
-    await hre.run("verify:verify", {
-        address: marketRegistryImpl.address,
-        constructorArguments: []
-    });
-    
-    // 3. Configure with conservative parameters
-    const conservativeConfig = {
-        ...marketConfig,
-        maxLeverage: 20, // Start conservative
-        maxPositionSize: ethers.utils.parseUnits("100", 18) // Smaller limits
-    };
-}
-```
+### Security Checklist
+- [ ] Reentrancy guards on state-changing functions
+- [ ] Input validation on all external functions
+- [ ] Access control on administrative functions
+- [ ] Overflow/underflow protection
+- [ ] Flash loan attack prevention
+- [ ] Front-running mitigation
+- [ ] Oracle manipulation resistance
 
-## Monitoring & Maintenance
+## Deployment Guide
 
-### Key Metrics to Monitor
+### Testnet Deployment (Mumbai)
+1. **Deploy Market Registry**
+   ```bash
+   npx hardhat run scripts/deploy-market-registry.ts --network mumbai
+   ```
 
-1. **System Health**
-   - Contract balance levels
-   - Gas usage per operation
-   - Transaction success rates
-   - Oracle update frequency
+2. **Deploy Oracle Integration**
+   ```bash
+   npx hardhat run scripts/deploy-oracle.ts --network mumbai
+   ```
 
-2. **Trading Metrics**
-   - Order book depth
-   - Trade volume
-   - Open interest
-   - Funding rates
+3. **Deploy Trading Engine**
+   ```bash
+   npx hardhat run scripts/deploy-trading.ts --network mumbai
+   ```
 
-3. **Risk Metrics**
-   - Liquidation frequency
-   - Insurance fund ratio
-   - ADL events
-   - Circuit breaker triggers
+4. **Continue with remaining modules...**
 
-### Maintenance Procedures
+### Configuration Steps
+1. Set up access control roles
+2. Configure initial markets
+3. Set oracle price feeds
+4. Initialize insurance fund
+5. Configure risk parameters
 
-1. **Regular Updates**
-   - Oracle weight adjustments
-   - Fee parameter tuning
-   - Risk parameter updates
-
-2. **Emergency Procedures**
-   - Market freeze protocol
-   - Emergency settlement
-   - Fund recovery
-
-## Success Criteria
-
-### Technical Metrics
-- [ ] Gas cost per trade < 200,000
-- [ ] Order matching latency < 1 block
-- [ ] System uptime > 99.9%
-- [ ] Zero fund loss events
-
-### Business Metrics
-- [ ] Support 1000+ simultaneous positions
-- [ ] Handle $5B daily volume
-- [ ] Process 1000+ orders per second
-- [ ] Maintain <0.1% oracle price deviation
+### Mainnet Deployment Checklist
+- [ ] All tests passing (unit + integration)
+- [ ] Gas optimization complete
+- [ ] Security audit passed
+- [ ] Deployment scripts tested on testnet
+- [ ] Monitoring infrastructure ready
+- [ ] Emergency procedures documented
+- [ ] Initial parameters configured
+- [ ] Multi-sig wallets set up
 
 ## Risk Mitigation
 
 ### Technical Risks
-1. **Smart Contract Bugs**
-   - Mitigation: Extensive testing, audits
+1. **Gas Limit Issues**
+   - Mitigation: Batch operations, storage optimization
    
 2. **Oracle Failures**
-   - Mitigation: Multi-oracle design, fallbacks
+   - Mitigation: Multi-oracle design, fallback mechanism
 
-3. **Network Congestion**
-   - Mitigation: Gas optimization, batch operations
+3. **Liquidation Cascades**
+   - Mitigation: Partial liquidations, circuit breakers
 
 ### Operational Risks
-1. **Liquidity Shortage**
-   - Mitigation: Incentive programs, market makers
+1. **Parameter Misconfiguration**
+   - Mitigation: Validation library, timelock changes
 
-2. **Cascade Liquidations**
-   - Mitigation: Circuit breakers, position limits
+2. **Access Control Breach**
+   - Mitigation: Role-based access, multi-sig requirements
 
-This implementation plan provides a structured approach to building the DEX Perpetual Contracts Protocol with clear milestones and AI-optimized development guidelines.
+## Success Metrics
+
+### Technical Metrics
+- Gas cost per trade: <500k gas
+- Order matching latency: <1 block
+- Liquidation execution time: <2 blocks
+- System uptime: >99.9%
+
+### Business Metrics
+- Daily volume capacity: $5B+
+- Concurrent positions: 100k+
+- Markets supported: 100+
+- Order book depth: 1000+ orders per market
+
+## Timeline Summary
+
+| Phase | Duration | Key Deliverables |
+|-------|----------|------------------|
+| Foundation | 2 weeks | Market Registry, Basic Oracle |
+| Trading Core | 2 weeks | Order Book, Matching Engine |
+| Financial Engine | 2 weeks | Positions, Margin, Funding |
+| Risk Systems | 2 weeks | Liquidations, Insurance Fund |
+| Integration | 2 weeks | System Testing, Optimization |
+| Security & Deploy | 2 weeks | Audits, Mainnet Launch |
+
+**Total Duration**: 12 weeks (3 months)
+
+## Next Steps
+
+1. **Immediate Actions**:
+   - Set up development environment
+   - Create project repository structure
+   - Begin Market Registry implementation
+
+2. **Week 1 Goals**:
+   - Complete Market Registry core contracts
+   - Set up comprehensive test suite
+   - Begin Oracle Integration
+
+3. **Communication**:
+   - Weekly progress updates
+   - Blocker identification and resolution
+   - Regular code reviews
+
+This implementation plan provides a clear roadmap for building the DEX Perpetual Contracts Protocol with realistic timelines and comprehensive testing strategies.
