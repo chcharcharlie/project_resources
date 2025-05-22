@@ -1,11 +1,19 @@
 {
   "project_name": "dex-perps-protocol",
   "description": "Decentralized perpetual contracts exchange for US stock prices",
-  "status": "requirements_gathering",
+  "status": "requirements_complete",
   "created_date": "2025-01-22",
   "last_updated": "2025-01-22",
   "active_role": "product_analyst",
-  "phases_completed": ["initialization"],
-  "current_phase": "requirements_gathering",
-  "roles_assigned": ["product_analyst", "product_manager", "software_architect", "software_engineer"]
+  "phases_completed": ["initialization", "requirements_gathering"],
+  "current_phase": "awaiting_prd",
+  "roles_assigned": ["product_analyst", "product_manager", "software_architect", "software_engineer"],
+  "key_decisions": {
+    "leverage": "100X maximum",
+    "collateral": "Stablecoins (USDC, USDT, DAI)",
+    "target_volume": "$5B daily",
+    "chain": "TBD (considering L2s and Solana)",
+    "order_book": "Fully on-chain",
+    "funding_rate": "1 hour intervals with modified formula"
+  }
 }
